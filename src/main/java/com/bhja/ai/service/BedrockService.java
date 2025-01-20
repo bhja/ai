@@ -40,7 +40,7 @@ public class BedrockService
      */
 
     @Override
-    public  Map<String,Object>  converseWithTitan(String input) {
+    public Map<String, Object> converseWithTitan(String input) {
 
         try {
             //The message that the user sends to the model.
@@ -57,7 +57,7 @@ public class BedrockService
             // Retrieve the generated text from Bedrock's response object.
             var responseText = response.output().message().content().getFirst().text();
             log.info(responseText);
-            return Map.of("response",responseText);
+            return Map.of("response", responseText);
         } catch (SdkClientException e) {
             log.error("Could not process the request :{}", e.getMessage());
             throw new RuntimeException(e);
@@ -65,7 +65,7 @@ public class BedrockService
     }
 
     /**
-     * Anthropic claude 2.1 is used here .
+     * Anthropic claude 2.1 is used here . This is just a sample. A lot more can be done in v3.x
      * Here is the documentation of the parameters
      * <a href=https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-anthropic-claude-messages
      * .html#model-parameters-anthropic-claude-messages-request-response>
@@ -75,21 +75,13 @@ public class BedrockService
      * @return response as string.
      */
     @Override
-    public Map<String,Object> summarizationWithAnthropicViaClaude(String request, String summary) {
+    public Map<String, Object> summarizationWithAnthropicViaClaude(String request, String summary) {
         try {
-            var nativeRequestTemplate = """
-                    {
-                         "anthropic_version": "bedrock-2023-05-31",
-                         "max_tokens_to_sample": {{tokens}},
-                         "prompt": "Human: {{summary}}<text>{{prompt}}</text>\\n\\nAssistant:",
-                         "temperature": {{temperature}},
-                         "stop_sequences": []
-                     }
-                    """;
 
-            var input = nativeRequestTemplate.replace("{{prompt}}", request).replace("{{summary}}", summary).replace(
+            var input = getAnthropicTemplate().replace("{{prompt}}", request).replace("{{summary}}", summary).replace(
                                                      "{{temperature}}",
-                                                     String.valueOf(anthropicConfig.getTemperature()))
+                                                     String.valueOf(anthropicConfig.getTemperature())).replace(
+                                                             "{{permutations}}",String.valueOf(anthropicConfig.getPermutations()))
                                              .replace("{{tokens}}", String.valueOf(anthropicConfig.getMaxToken()));
             InvokeModelRequest request0 =
                     InvokeModelRequest.builder().modelId(anthropicConfig.getModelId()).body(SdkBytes.fromUtf8String(input)).contentType("application/json").build();
@@ -99,10 +91,28 @@ public class BedrockService
             var responseBody = objectMapper.readValue(response.body().asUtf8String(), Map.class);
 
             log.info("{}", response.body().asUtf8String());
-            return Map.of("response",(String) responseBody.get("completion"));
+            return Map.of("response", responseBody.get("completion"));
         } catch (SdkClientException | JsonProcessingException e) {
             log.error("Could not process the request due to {}", e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * A very small template. with the required parameters for summary.
+     * @return String
+     */
+    protected String getAnthropicTemplate(){
+        return """
+                    {
+                         "anthropic_version": "bedrock-2023-05-31",
+                         "max_tokens_to_sample": {{tokens}},
+                         "prompt": "Human: {{summary}}<text>{{prompt}}</text>\\n\\nAssistant:",
+                         "temperature": {{temperature}},
+                         "top_k" : 250,
+                         "top_p" : {{permutations}},
+                         "stop_sequences": []
+                     }
+                    """;
     }
 }

@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface IBedrockService {
 
-    Map<String,Object>  converseWithTitan(String request);
+    Map<String, Object> converseWithTitan(String request);
 
-    Map<String,Object> summarizationWithAnthropicViaClaude(String request, String summarization);
+    Map<String, Object> summarizationWithAnthropicViaClaude(String request, String summarization);
 }
