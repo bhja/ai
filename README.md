@@ -5,6 +5,7 @@
     models used are available in this region)
     Enable the models that are required to test the 2 scenarios. The model ids are configured in the application.properties.
 
+![Uploading AWS_Permissions.png…]()
 
 
 
