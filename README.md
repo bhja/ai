@@ -4,8 +4,8 @@
     Configure the env variable AWS_ACCESS_KEY and AWS_SECRET_KEY and AWS_REGION (Set this as US-EAST since most of 
     models used are available in this region)
     Enable the models that are required to test the 2 scenarios. The model ids are configured in the application.properties.
+![AWS_Permissions.png](AWS_Permissions.png)
 
-![Uploading AWS_Permissions.png…]()
 
 
 
