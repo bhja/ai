@@ -16,12 +16,12 @@ public class TextAiController {
     private final IBedrockService bedrockService;
 
     @PostMapping("/titan/text")
-    public ResponseEntity<String> handleText(@RequestBody Map<String, String> request) {
-        return ResponseEntity.ok(bedrockService.converseWithTitan(request.get("text")));
+    public ResponseEntity<Map<String,Object>> handleText(@RequestBody Map<String, String> request) {
+        return ResponseEntity.ok(bedrockService.converseWithTitan(request.get("request")));
     }
 
     @PostMapping("/antropic/textsummary")
-    public ResponseEntity<String> handleTextSummary(@RequestBody Map<String, String> request) {
+    public ResponseEntity<Map<String,Object>> handleTextSummary(@RequestBody Map<String, String> request) {
         return ResponseEntity.ok(bedrockService.summarizationWithAnthropicViaClaude(request.get("text"), request.get(
                 "request")));
     }

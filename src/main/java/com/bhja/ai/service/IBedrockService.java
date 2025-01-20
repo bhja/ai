@@ -1,8 +1,10 @@
 package com.bhja.ai.service;
 
+import java.util.Map;
+
 public interface IBedrockService {
 
-    String converseWithTitan(String request);
+    Map<String,Object>  converseWithTitan(String request);
 
-    String summarizationWithAnthropicViaClaude(String request, String summarization);
+    Map<String,Object> summarizationWithAnthropicViaClaude(String request, String summarization);
 }

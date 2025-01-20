@@ -40,7 +40,7 @@ public class BedrockService
      */
 
     @Override
-    public String converseWithTitan(String input) {
+    public  Map<String,Object>  converseWithTitan(String input) {
 
         try {
             //The message that the user sends to the model.
@@ -57,7 +57,7 @@ public class BedrockService
             // Retrieve the generated text from Bedrock's response object.
             var responseText = response.output().message().content().getFirst().text();
             log.info(responseText);
-            return responseText;
+            return Map.of("response",responseText);
         } catch (SdkClientException e) {
             log.error("Could not process the request :{}", e.getMessage());
             throw new RuntimeException(e);
@@ -75,7 +75,7 @@ public class BedrockService
      * @return response as string.
      */
     @Override
-    public String summarizationWithAnthropicViaClaude(String request, String summary) {
+    public Map<String,Object> summarizationWithAnthropicViaClaude(String request, String summary) {
         try {
             var nativeRequestTemplate = """
                     {
@@ -95,10 +95,11 @@ public class BedrockService
                     InvokeModelRequest.builder().modelId(anthropicConfig.getModelId()).body(SdkBytes.fromUtf8String(input)).contentType("application/json").build();
 
             InvokeModelResponse response = bedrockRuntimeClient.invokeModel(request0);
+            //TODO - Needs error handling and further processing as per usecase
             var responseBody = objectMapper.readValue(response.body().asUtf8String(), Map.class);
 
             log.info("{}", response.body().asUtf8String());
-            return (String) responseBody.get("completion");
+            return Map.of("response",(String) responseBody.get("completion"));
         } catch (SdkClientException | JsonProcessingException e) {
             log.error("Could not process the request due to {}", e.getMessage());
             throw new RuntimeException(e);
