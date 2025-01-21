@@ -1,4 +1,6 @@
-
+### Envt ####
+    Maven 3.8.5 or greater
+    Jdk 22
 ### Steps ###
 
     Configure the env variable AWS_ACCESS_KEY and AWS_SECRET_KEY and AWS_REGION (Set this as US-EAST since most of 
