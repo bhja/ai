@@ -41,7 +41,6 @@ public class BedrockService
 
     @Override
     public Map<String, Object> converseWithTitan(String input) {
-
         try {
             //The message that the user sends to the model.
             Message message =

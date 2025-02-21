@@ -24,7 +24,7 @@ For Anthropic Claude refer
 curl --location 'http://localhost:8081/titan/text' \
 --header 'Content-Type: application/json' \
 --data '{
-"request" : "what is ai"
+"request" : "what is RAG"
 }'
 
 #### Anthropic summarize endpoint
